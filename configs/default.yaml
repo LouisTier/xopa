@@ -1,0 +1,87 @@
+# Default configuration: the paper's recorded settings.
+# Every script accepts --config and CLI overrides for the headline knobs.
+
+data:
+  target: data_164
+  standardize_target: false # opt in only when the source target is unscaled
+
+split:
+  ratios: [0.70, 0.075, 0.075, 0.15] # train / val / calib / test
+  seed: 42
+
+ffs:
+  operators: [rfe, mrmr, lasso, tree]
+  grid: [170, 150, 130, 110, 90, 70, 50, 30] # selection sizes K (multiples of rfe_step)
+  q_iterations: 10 # the paper's Q
+  rho: 0.7 # subsample ratio, without replacement
+  tau: 0.8 # frequency threshold; "auto" derives it from the probes
+  rfe_step: 10
+  probes:
+    n_gaussian: 1
+    n_permuted: 1
+
+sfs:
+  n_repeats: 5 # model seeds per k (variability band)
+  epsilon: 0.02 # relative MSE tolerance for the parsimonious size (d_pars)
+  shap_subsample: null # rows for the SHAP ranking (null = full train)
+
+boruta:
+  max_iter: 100
+  alpha: 0.05
+  perc: 100
+  two_step: true
+
+conformal:
+  alpha: 0.1 # target miscoverage (90% nominal coverage)
+  m: 2200 # number of calibration shuffles (the paper's M)
+  calib_fraction: 0.8 # sub-calibration share of each shuffle
+  ens:
+    n_models: 15
+    n_best: 10
+
+explain:
+  group_size: 1500 # record-index drift group size
+  bin_width: 0.5 # output quality bin width
+
+models:
+  early_stopping_rounds: 20 # always monitored on the validation split
+  xgboost:
+    # Tuned values reported in the paper.
+    n_estimators: 172
+    max_depth: 9
+    learning_rate: 0.076
+    colsample_bytree: 0.74
+    subsample: 0.60
+  random_forest:
+    # Tuned values reported in the paper.
+    n_estimators: 500
+    max_depth: 14
+    max_features: 0.8
+    min_samples_leaf: 2
+    min_samples_split: 2
+    # Fixed execution parameter, not a tuned value.
+    n_jobs: -1
+  lightgbm:
+    # Tuned values reported in the paper.
+    n_estimators: 535
+    num_leaves: 130
+    learning_rate: 0.009
+    colsample_bytree: 0.78
+    subsample: 0.82
+    # Fixed execution parameters; subsample_freq activates row subsampling.
+    subsample_freq: 1
+    n_jobs: -1
+  mlp:
+    # Tuned values reported in the paper.
+    n_epochs: 107
+    n_layers: 3
+    n_units: 256
+    activation: relu
+    dropout: 0.1
+    learning_rate: 0.001
+    # Fixed implementation parameters, not tuned values.
+    batch_size: 256
+    optimizer: adam
+    loss: mse
+    device: cpu
+    n_threads: 1

@@ -1,0 +1,125 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xopa"
+version = "0.1.0"
+description = "Explainable offline process analytics: RFFS feature selection, M-split conformal prediction, and SHAP explainability for tabular regression"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Louis Berthier" }]
+requires-python = ">=3.11"
+keywords = [
+    "feature selection",
+    "conformal prediction",
+    "explainability",
+    "SHAP",
+    "soft sensing",
+    "process analytics",
+]
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.0",
+    "scikit-learn>=1.4",
+    "xgboost>=2.1",
+    # 4.7 introduced the eval_X/eval_y fit parameters used by xopa.models.
+    "lightgbm>=4.7",
+    "torch>=2.2",
+    "shap>=0.46",
+    # Floor numba explicitly: without it the resolver may satisfy shap's numba
+    # requirement with a 2021-era numba/llvmlite pair that cannot build on
+    # Python 3.11.
+    "numba>=0.60",
+    "mrmr-selection>=0.2",
+    "scipy>=1.11",
+    "pyyaml>=6.0",
+]
+
+[project.urls]
+Repository = "https://github.com/LouisTier/xopa"
+
+[dependency-groups]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+# Executed analysis notebooks (not part of the importable package).
+notebooks = [
+    "jupytext>=1.16",
+    "nbconvert>=7.16",
+    "ipykernel>=6.29",
+    "matplotlib>=3.8",
+    "shapiq>=1.2",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["xopa*"]
+
+[tool.uv]
+# Keep the notebooks group installed by default so `uv run jupyter/jupytext`
+# does not strip it during the implicit environment sync.
+default-groups = ["dev", "notebooks"]
+# Supported platforms: Apple-silicon macOS (development) and Linux (lab
+# machines, CI). Intel macOS is excluded: modern numba (a shap dependency)
+# no longer ships wheels for it, which would drag the whole lock back to
+# numba 0.53 / llvmlite 0.36.
+environments = [
+    "sys_platform == 'darwin' and platform_machine == 'arm64'",
+    "sys_platform == 'linux'",
+]
+
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+# ==================== Ruff (lint + format) ====================
+
+[tool.ruff]
+fix = true
+line-length = 88
+target-version = "py311"
+# Executed analyses, not package code: display-oriented cells legitimately
+# trip rules like unused-variable.
+extend-exclude = ["notebooks"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort (import sorting)
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+    "D",   # pydocstyle
+    "RUF", # ruff-specific rules
+]
+ignore = [
+    "E501", # line too long, the formatter handles it
+    "D100", # missing module docstring
+    "D104", # missing public package docstring
+    "D107", # missing __init__ docstring
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["xopa"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D", "SIM"]
+"scripts/*" = ["D103"]
+
+# ==================== Pytest ====================
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-q", "--tb=short"]

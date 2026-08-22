@@ -1,0 +1,48 @@
+# Data must NEVER enter this repository (proprietary dataset, not distributable)
+data/
+*.csv
+*.parquet
+*.feather
+
+# Environment variables
+.env
+
+# Exception: public, redistributable demonstration datasets (see their README
+# for license and attribution). The proprietary dataset never lives here.
+!public-datasets/
+!public-datasets/**
+
+# Experiment outputs are private by default. Only publication-safe aggregate
+# figures and tables produced by the executed notebooks may be released.
+results/*
+# !results/notebook-figures/
+# results/notebook-figures/*
+# !results/notebook-figures/*/
+# results/notebook-figures/*/*
+# !results/notebook-figures/*/*.pdf
+# !results/notebook-figures/*/*.png
+# !results/notebook-figures/*/*.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+htmlcov/
+.coverage
+coverage.xml
+junit.xml
+
+# OS / editors
+.DS_Store
+.vscode/
+.idea/
+
+old_proposal*.ipynb

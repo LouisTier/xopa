@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the accompanying article."
+title: "xopa"
+version: 0.1.0
+type: software
+repository-code: "https://github.com/LouisTier/xopa"
+authors:
+  - family-names: "Berthier"
+    given-names: "Louis"
+preferred-citation:
+  type: article
+  title: "Explainable Offline Process Analytics for Within-Grade Quality Variability in Industrial Rubber Mixing"
+  journal: "Digital Chemical Engineering"
+  year: 2026
+  authors:
+    - family-names: "Berthier"
+      given-names: "Louis"
+    - family-names: "Shokry"
+      given-names: "Ahmed"
+    - family-names: "Moreaud"
+      given-names: "Maxime"
+    - family-names: "Ramelet"
+      given-names: "Guillaume"
+    - family-names: "Desroziers"
+      given-names: "Sylvain"
+    - family-names: "Moulines"
+      given-names: "Eric"

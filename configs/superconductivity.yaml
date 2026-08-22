@@ -1,0 +1,80 @@
+# Public UCI Superconductivity campaign.
+# The source target remains in Kelvin; its transform is learned after splitting.
+
+data:
+  target: data_164
+  standardize_target: true
+
+split:
+  ratios: [0.70, 0.075, 0.075, 0.15]
+  seed: 42
+
+ffs:
+  operators: [rfe, mrmr, lasso, tree]
+  grid: [80, 70, 60, 50, 40, 30]
+  q_iterations: 10
+  rho: 0.7
+  tau: 0.8
+  rfe_step: 10
+  probes:
+    n_gaussian: 1
+    n_permuted: 1
+
+sfs:
+  n_repeats: 5
+  epsilon: 0.02
+  shap_subsample: null
+
+boruta:
+  max_iter: 100
+  alpha: 0.05
+  perc: 100
+  two_step: true
+
+conformal:
+  alpha: 0.1
+  m: 2200
+  calib_fraction: 0.8
+  ens:
+    n_models: 15
+    n_best: 10
+
+explain:
+  group_size: 1500
+  bin_width: 0.5
+
+models:
+  early_stopping_rounds: 20
+  xgboost:
+    n_estimators: 172
+    max_depth: 9
+    learning_rate: 0.076
+    colsample_bytree: 0.74
+    subsample: 0.60
+  random_forest:
+    n_estimators: 500
+    max_depth: 14
+    max_features: 0.8
+    min_samples_leaf: 2
+    min_samples_split: 2
+    n_jobs: -1
+  lightgbm:
+    n_estimators: 535
+    num_leaves: 130
+    learning_rate: 0.009
+    colsample_bytree: 0.78
+    subsample: 0.82
+    subsample_freq: 1
+    n_jobs: -1
+  mlp:
+    n_epochs: 107
+    n_layers: 3
+    n_units: 256
+    activation: relu
+    dropout: 0.1
+    learning_rate: 0.001
+    batch_size: 256
+    optimizer: adam
+    loss: mse
+    device: cpu
+    n_threads: 1

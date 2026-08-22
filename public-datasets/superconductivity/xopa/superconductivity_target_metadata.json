@@ -1,0 +1,8 @@
+{
+  "original_target": "critical_temp",
+  "xopa_target": "data_164",
+  "source_unit": "kelvin",
+  "stored_unit": "kelvin",
+  "storage_transform": "identity",
+  "analysis_transform": "configured by the pipeline and fitted on the training split only"
+}
