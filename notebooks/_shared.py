@@ -41,7 +41,7 @@ BACKBONE_LABELS = {
     "mlp": "MLP",
 }
 OPERATORS = ["rfe", "mrmr", "lasso", "tree"]
-OPERATOR_LABELS = {"rfe": "RFE", "mrmr": "mRMR", "lasso": "LASSO", "tree": "Tree imp."}
+OPERATOR_LABELS = {"rfe": "RFE", "mrmr": "mRMR", "lasso": "LASSO", "tree": "Model importance"}
 METHODS = ["scp", "cqr", "ens"]
 METHOD_LABELS = {"scp": "m-SCP", "cqr": "m-CQR", "ens": "ENS"}
 
